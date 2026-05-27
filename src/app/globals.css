@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --color-primary: #1a1a2e;
+  --color-accent: #c8f169;
+  --color-cream: #f5f0eb;
+  --color-mint: #a8e6cf;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4f58a;
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+
+/* Smooth scroll sections */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Text reveal animation */
+.text-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.text-reveal.visible {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* Magnetic button effect */
+.magnetic-btn {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #c8f169 0%, #a8e6cf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotateZ(0deg); }
+  25% { transform: translateY(-10px) rotateZ(1deg); }
+  75% { transform: translateY(10px) rotateZ(-1deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(200, 241, 105, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(200, 241, 105, 0.6); }
+}
+
+/* Team card hover effect */
+.team-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.team-card .overlay-image {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.2);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-card:hover .overlay-image {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.team-card .default-image {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.team-card:hover .default-image {
+  transform: scale(1.1);
+  filter: blur(2px);
+}
+
+/* Chat widget */
+.chat-bubble {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Service card glow on hover */
+.service-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.service-card:hover {
+  border-color: rgba(200, 241, 105, 0.3);
+  box-shadow: 0 20px 60px rgba(200, 241, 105, 0.1);
+  transform: translateY(-8px);
+}
