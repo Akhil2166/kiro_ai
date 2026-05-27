@@ -114,3 +114,28 @@ body {
     radial-gradient(ellipse at 70% 60%, rgba(232, 226, 218, 0.4) 0%, transparent 40%),
     linear-gradient(180deg, #f6f3ef 0%, #efe9e0 50%, #f6f3ef 100%);
 }
+
+
+/* Magnetic hover */
+.magnetic { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.magnetic:hover { transform: scale(1.02) translateY(-1px); }
+
+/* Smooth image reveal */
+.img-reveal { clip-path: inset(100% 0 0 0); transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+.img-reveal.revealed { clip-path: inset(0 0 0 0); }
+
+/* Mobile motion reduction */
+@media (max-width: 768px) {
+  .hero-gradient { min-height: 100vh !important; }
+  [data-parallax] { transform: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Improved luxury link hover */
+a { transition: color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }

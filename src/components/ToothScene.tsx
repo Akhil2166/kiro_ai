@@ -17,12 +17,12 @@ function ToothModel({ mouse, scrollProgress }: { mouse: { x: number; y: number }
         const mesh = child as THREE.Mesh
         mesh.material = new THREE.MeshPhysicalMaterial({
           color: new THREE.Color('#faf8f5'),
-          roughness: 0.18,
+          roughness: 0.12,
           metalness: 0.0,
-          clearcoat: 0.4,
+          clearcoat: 0.6,
           clearcoatRoughness: 0.2,
           reflectivity: 0.6,
-          envMapIntensity: 0.7,
+          envMapIntensity: 0.9,
           sheen: 0.1,
           sheenRoughness: 0.3,
           sheenColor: new THREE.Color('#f0ebe4'),
@@ -35,7 +35,7 @@ function ToothModel({ mouse, scrollProgress }: { mouse: { x: number; y: number }
     if (!groupRef.current) return
     const t = state.clock.elapsedTime
     const c = current.current
-    const lf = 0.018
+    const lf = 0.015
 
     // Scroll-linked perspective (NOT spinning)
     const scrollRotY = scrollProgress * 0.5
@@ -124,7 +124,7 @@ export default function ToothScene() {
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.1,
         }}
-        dpr={[1, 2]}
+        dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? [1, 1] : [1, 2]}
         style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>

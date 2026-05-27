@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
   const layersRef = useRef<{ el: HTMLElement; speed: number }[]>([])
+  const [stickyOpacity, setStickyOpacity] = useState(1)
 
   useEffect(() => {
     if (!heroRef.current) return
@@ -44,8 +46,30 @@ export default function Hero() {
     rafId = requestAnimationFrame(animate)
     window.addEventListener('mousemove', handleMouseMove)
 
+    // Scroll-based opacity fade on sticky content
+    const handleScroll = () => {
+      if (!heroRef.current) return
+      const sectionHeight = heroRef.current.offsetHeight
+      const scrolled = window.scrollY
+      const fadeStart = sectionHeight * 0.6
+      const fadeEnd = sectionHeight * 0.9
+
+      if (scrolled <= fadeStart) {
+        setStickyOpacity(1)
+      } else if (scrolled >= fadeEnd) {
+        setStickyOpacity(0)
+      } else {
+        const progress = (scrolled - fadeStart) / (fadeEnd - fadeStart)
+        setStickyOpacity(1 - progress)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('scroll', handleScroll)
       cancelAnimationFrame(rafId)
     }
   }, [])
@@ -55,7 +79,11 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-[200vh] overflow-hidden hero-gradient"
     >
-      <div className="sticky top-0 h-screen flex items-center justify-center">
+      <div
+        ref={stickyRef}
+        className="sticky top-0 h-screen flex items-center justify-center"
+        style={{ opacity: stickyOpacity, transition: 'opacity 0.3s ease-out' }}
+      >
         <div className="tooth-glow" data-parallax="0.3" />
 
         <div className="relative z-10 w-full max-w-site mx-auto px-8 md:px-16">
