@@ -7,21 +7,16 @@ export default function ScrollProgress() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      const currentProgress = (window.scrollY / totalHeight) * 100
-      setProgress(currentProgress)
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      if (total > 0) setProgress((window.scrollY / total) * 100)
     }
-
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return (
-    <div className="fixed top-0 left-0 w-full h-[3px] z-[9998]">
-      <div
-        className="h-full bg-gradient-to-r from-accent to-mint transition-all duration-150 ease-out"
-        style={{ width: `${progress}%` }}
-      />
+    <div className="fixed top-0 left-0 w-full h-[2px] z-[101]">
+      <div className="h-full bg-primary transition-[width] duration-100 ease-out" style={{ width: `${progress}%` }} />
     </div>
   )
 }

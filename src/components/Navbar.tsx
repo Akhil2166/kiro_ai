@@ -7,14 +7,12 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navLinks = [
+  const links = [
     { label: 'About', href: '#about' },
     { label: 'Services', href: '#services' },
     { label: 'Team', href: '#team' },
@@ -24,74 +22,64 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
-        scrolled
-          ? 'py-3 glass'
-          : 'py-6 bg-transparent'
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
+        scrolled ? 'py-4 bg-white/95 backdrop-blur-sm border-b border-border' : 'py-6 bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-site mx-auto px-10 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="text-2xl font-display font-bold tracking-tight">
-          <span className="text-white">Den</span>
-          <span className="text-accent">z</span>
+        <a href="#" className="font-figtree font-light text-[22px] text-heading">
+          Denz
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-10">
+          {links.map((l) => (
             <a
-              key={link.label}
-              href={link.href}
-              className="text-sm font-medium text-white/70 hover:text-accent transition-colors duration-300 relative group"
+              key={l.label}
+              href={l.href}
+              className="font-inter text-[14px] text-body hover:text-primary transition-colors duration-200"
             >
-              {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-300 group-hover:w-full" />
+              {l.label}
             </a>
           ))}
         </div>
 
-        {/* CTA Button */}
-        <a
-          href="#contact"
-          className="hidden md:block magnetic-btn px-6 py-2.5 bg-accent text-primary font-semibold text-sm rounded-full hover:bg-accent-light transition-all duration-300"
-        >
-          Book Appointment
+        {/* CTA */}
+        <a href="#contact" className="hidden md:inline-flex btn-primary text-[13px] py-[10px] px-[28px]">
+          Book Now
         </a>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden w-8 h-8 flex flex-col justify-center items-center gap-1.5"
+          className="md:hidden w-7 h-7 flex flex-col justify-center items-center gap-[5px]"
+          aria-label="Menu"
         >
-          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`w-5 h-[1.5px] bg-heading transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
+          <span className={`w-5 h-[1.5px] bg-heading transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+          <span className={`w-5 h-[1.5px] bg-heading transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <div className={`md:hidden absolute top-full left-0 w-full glass transition-all duration-500 ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-        <div className="px-6 py-8 flex flex-col gap-6">
-          {navLinks.map((link) => (
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-border px-10 py-8 flex flex-col gap-5">
+          {links.map((l) => (
             <a
-              key={link.label}
-              href={link.href}
+              key={l.label}
+              href={l.href}
               onClick={() => setMenuOpen(false)}
-              className="text-lg font-medium text-white/80 hover:text-accent transition-colors"
+              className="font-inter text-[16px] text-body hover:text-primary transition-colors"
             >
-              {link.label}
+              {l.label}
             </a>
           ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="px-6 py-3 bg-accent text-primary font-semibold text-center rounded-full"
-          >
+          <a href="#contact" onClick={() => setMenuOpen(false)} className="btn-primary text-center mt-2">
             Book Appointment
           </a>
         </div>
-      </div>
+      )}
     </nav>
   )
 }
