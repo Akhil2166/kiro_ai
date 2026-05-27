@@ -3,61 +3,109 @@
 import { useEffect, useRef } from 'react'
 
 export default function Hero() {
-  const contentRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!contentRef.current) return
-      const scrollY = window.scrollY
-      const opacity = Math.max(0, 1 - scrollY / 600)
-      contentRef.current.style.opacity = String(opacity)
+    // Subtle parallax on mouse move for the entire hero
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!heroRef.current) return
+      const { clientX, clientY } = e
+      const { innerWidth, innerHeight } = window
+      const x = (clientX / innerWidth - 0.5) * 8
+      const y = (clientY / innerHeight - 0.5) * 4
+      const texts = heroRef.current.querySelectorAll('.parallax-text')
+      texts.forEach((el) => {
+        const htmlEl = el as HTMLElement
+        htmlEl.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`
+      })
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
-      <div ref={contentRef} className="text-center relative z-10 px-6 w-full max-w-site mx-auto">
-        {/* Main brand text - EXACTLY like Six B: huge, Figtree 300, dark grey */}
-        {/* "Den" + [space for 3D tooth] + "z" */}
-        <h1
-          className="font-figtree font-light leading-none tracking-tight select-none"
-          style={{
-            fontSize: 'clamp(80px, 12vw, 160px)',
-            color: '#333c4c',
-          }}
-        >
-          <span>Den</span>
-          {/* Gap where 3D tooth sits - sized proportionally */}
-          <span className="inline-block" style={{ width: 'clamp(60px, 9vw, 140px)' }}></span>
-          <span className="text-[#8594ae]">z</span>
-        </h1>
+    <section
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient"
+    >
+      {/* Radial glow behind tooth area */}
+      <div className="tooth-glow" />
 
-        {/* Subtitle - below the brand, matching Six B's descriptive subtitle */}
+      {/* Main composition container */}
+      <div className="relative z-10 w-full max-w-site mx-auto px-8 md:px-16">
+        {/* Typography composition: DEN [tooth space] Z */}
+        <div className="flex items-center justify-center select-none">
+          {/* DEN - left aligned, ultra bold */}
+          <span
+            className="parallax-text font-display text-warm-black transition-transform duration-1500 ease-cinematic"
+            style={{
+              fontSize: 'clamp(90px, 13vw, 200px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.04em',
+            }}
+          >
+            DEN
+          </span>
+
+          {/* Gap for 3D tooth — proportional to font size */}
+          <span
+            className="inline-block relative"
+            style={{ width: 'clamp(70px, 10vw, 160px)' }}
+          >
+            {/* This space is where the 3D tooth canvas renders (fixed overlay) */}
+          </span>
+
+          {/* Z - right aligned, ultra bold */}
+          <span
+            className="parallax-text font-display text-warm-black transition-transform duration-1500 ease-cinematic"
+            style={{
+              fontSize: 'clamp(90px, 13vw, 200px)',
+              fontWeight: 800,
+              lineHeight: 0.85,
+              letterSpacing: '-0.04em',
+            }}
+          >
+            Z
+          </span>
+        </div>
+
+        {/* Subtitle - editorial luxury tone */}
         <p
-          className="font-inter mt-10 max-w-[540px] mx-auto leading-relaxed"
+          className="parallax-text font-body text-muted text-center mt-12 md:mt-16 max-w-[420px] mx-auto transition-transform duration-2000 ease-cinematic"
           style={{
-            fontSize: '18px',
-            lineHeight: '27px',
-            color: '#606979',
-            fontWeight: 400,
+            fontSize: '16px',
+            lineHeight: '26px',
+            letterSpacing: '0.02em',
           }}
         >
-          Our entire team will bring their benevolence and expertise so that your
-          smile regains beauty and whiteness, bringing you well-being and happiness
-          through a healthy mouth.
+          Where precision meets artistry. Premium dental care
+          crafted for those who demand excellence.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-          <a href="#contact" className="btn-primary">
-            Book Appointment
-          </a>
-          <a href="#services" className="btn-outline">
-            Our Services
+        {/* Minimal CTA — understated, luxury */}
+        <div className="flex justify-center mt-12">
+          <a
+            href="#contact"
+            className="font-body text-[13px] tracking-[0.08em] uppercase text-muted border-b border-border pb-1 hover:text-warm-black hover:border-warm-black transition-all duration-700 ease-luxury"
+          >
+            Book a consultation
           </a>
         </div>
+      </div>
+
+      {/* Bottom caption - editorial detail */}
+      <div className="absolute bottom-10 left-8 md:left-16">
+        <p className="font-body text-[11px] tracking-[0.15em] uppercase text-muted/60">
+          Luxury Dental Care
+        </p>
+      </div>
+
+      <div className="absolute bottom-10 right-8 md:right-16">
+        <p className="font-body text-[11px] tracking-[0.15em] uppercase text-muted/60">
+          Bangalore, India
+        </p>
       </div>
     </section>
   )

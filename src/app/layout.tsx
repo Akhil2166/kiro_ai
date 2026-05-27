@@ -1,24 +1,27 @@
 import type { Metadata } from 'next'
-import { Figtree, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 
-const figtree = Figtree({
+// Neue Montreal style — using Inter with tight tracking as closest Google match
+// For production, replace with actual Neue Montreal local font files
+const displayFont = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-figtree',
+  weight: ['800', '900'],
+  variable: '--font-display',
   display: 'swap',
 })
 
-const inter = Inter({
+const bodyFont = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500'],
+  variable: '--font-body',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Denz | Premium Dental Care',
-  description: 'At Denz, our team combines benevolence and expertise for a radiant smile of health and beauty. Your well-being, our priority!',
+  title: 'Denz | Luxury Dental Care',
+  description: 'Where precision meets artistry. Premium dental care crafted for those who demand excellence.',
 }
 
 export default function RootLayout({
@@ -27,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${figtree.variable} ${inter.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${displayFont.variable} ${bodyFont.variable}`}>
+      <body className="vignette film-grain">{children}</body>
     </html>
   )
 }
