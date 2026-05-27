@@ -17,7 +17,7 @@ export default function Contact() {
   return (
     <section id="contact" ref={ref} className="py-20 md:py-[80px] px-10 max-w-site mx-auto">
       <div className="text-center mb-16 reveal">
-        <p className="font-inter text-[14px] text-primary mb-4 tracking-wide uppercase">Contact</p>
+        <p className="font-inter text-[14px] text-muted mb-4 tracking-wide uppercase">Contact</p>
         <h2 className="font-figtree font-light text-[54px] leading-[54px] text-heading mb-6">Find us</h2>
         <p className="font-inter text-[18px] leading-[27px] text-body max-w-[540px] mx-auto">
           Visit our modern clinic in the heart of Bangalore, or reach out to book your appointment.

@@ -21,7 +21,7 @@ export default function Marquee() {
             className="mx-10 font-figtree text-[28px] md:text-[36px] font-light text-border select-none"
           >
             {item}
-            <span className="text-primary/40 mx-6">/</span>
+            <span className="text-border mx-6">/</span>
           </span>
         ))}
       </div>

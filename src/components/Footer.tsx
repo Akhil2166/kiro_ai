@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
             <p className="font-figtree font-light text-[22px] text-heading mb-4">
-              Den<span className="text-primary">z</span>
+              Denz
             </p>
             <p className="font-inter text-[14px] leading-[21px] text-body">
               Premium dental care combining technology and compassion for your perfect smile.

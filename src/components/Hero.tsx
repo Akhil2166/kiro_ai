@@ -31,7 +31,7 @@ export default function Hero() {
           <span>Den</span>
           {/* Gap where 3D tooth sits - sized proportionally */}
           <span className="inline-block" style={{ width: 'clamp(60px, 9vw, 140px)' }}></span>
-          <span>z</span>
+          <span className="text-[#8594ae]">z</span>
         </h1>
 
         {/* Subtitle - below the brand, matching Six B's descriptive subtitle */}

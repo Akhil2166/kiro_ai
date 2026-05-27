@@ -56,7 +56,7 @@ export default function Team() {
   return (
     <section id="team" ref={ref} className="py-20 md:py-[80px] px-10 max-w-site mx-auto">
       <div className="text-center mb-16 reveal">
-        <p className="font-inter text-[14px] text-primary mb-4 tracking-wide uppercase">Our Team</p>
+        <p className="font-inter text-[14px] text-muted mb-4 tracking-wide uppercase">Our Team</p>
         <h2 className="font-figtree font-light text-[54px] leading-[54px] text-heading mb-6">
           Experts who care
         </h2>
@@ -77,7 +77,7 @@ export default function Team() {
             </div>
             <div className="mt-4">
               <p className="font-figtree text-[20px] leading-[30px] text-heading">{m.name}</p>
-              <p className="font-inter text-[14px] text-primary mt-1">{m.role}</p>
+              <p className="font-inter text-[14px] text-muted mt-1">{m.role}</p>
             </div>
           </div>
         ))}

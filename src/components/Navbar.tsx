@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="max-w-site mx-auto px-10 flex items-center justify-between">
         {/* Logo */}
         <a href="#" className="font-figtree font-light text-[22px] text-heading">
-          Den<span className="text-primary">z</span>
+          Denz
         </a>
 
         {/* Desktop links */}

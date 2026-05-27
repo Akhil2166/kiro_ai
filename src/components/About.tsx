@@ -30,7 +30,7 @@ export default function About() {
 
         {/* Text */}
         <div className="reveal">
-          <p className="font-inter text-[14px] text-primary mb-4 tracking-wide uppercase">
+          <p className="font-inter text-[14px] text-muted mb-4 tracking-wide uppercase">
             About Us
           </p>
           <h2 className="font-figtree font-light text-[54px] leading-[54px] text-heading mb-8">
