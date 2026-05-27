@@ -3,6 +3,11 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import Hero from '@/components/Hero'
+import Services from '@/components/Services'
+import Experience from '@/components/Experience'
+import Transformations from '@/components/Transformations'
+import Testimonials from '@/components/Testimonials'
+import Footer from '@/components/Footer'
 
 const ToothScene = dynamic(() => import('@/components/ToothScene'), { ssr: false })
 
@@ -42,6 +47,11 @@ export default function Home() {
     <main ref={mainRef} className="relative">
       <ToothScene />
       <Hero />
+      <Services />
+      <Experience />
+      <Transformations />
+      <Testimonials />
+      <Footer />
     </main>
   )
 }
