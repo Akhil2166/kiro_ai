@@ -2,52 +2,76 @@
 
 import { useEffect, useRef, useState, Suspense, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Environment } from '@react-three/drei'
+import { useGLTF, Environment, ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
 
-function ToothModel({ scrollProgress }: { scrollProgress: number }) {
+function ToothModel({ mouse, scrollProgress }: { mouse: { x: number; y: number }; scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/models/scene.gltf')
   const clonedScene = useMemo(() => scene.clone(), [scene])
+  const current = useRef({ rotX: 0.15, rotY: 0, rotZ: 0, posX: 0, posY: 0, scale: 1.6 })
 
   useEffect(() => {
     clonedScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
-        mesh.material = new THREE.MeshStandardMaterial({
-          color: new THREE.Color('#f0f0f0'),
-          roughness: 0.4,
-          metalness: 0.02,
-          envMapIntensity: 0.4,
+        mesh.material = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color('#faf8f5'),
+          roughness: 0.12,
+          metalness: 0.0,
+          clearcoat: 0.6,
+          clearcoatRoughness: 0.2,
+          reflectivity: 0.6,
+          envMapIntensity: 0.9,
+          sheen: 0.1,
+          sheenRoughness: 0.3,
+          sheenColor: new THREE.Color('#f0ebe4'),
         })
       }
     })
   }, [clonedScene])
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!groupRef.current) return
+    const t = state.clock.elapsedTime
+    const c = current.current
+    const lf = 0.015
 
-    // === EXACT SIX B BEHAVIOR ===
-    // PURELY scroll-driven. No idle animation. Stops when user stops scrolling.
+    // Scroll-linked perspective (NOT spinning)
+    const scrollRotY = scrollProgress * 0.5
+    const scrollRotX = Math.sin(scrollProgress * Math.PI) * 0.12
+    const scrollScale = 1.6 + Math.sin(scrollProgress * Math.PI * 0.8) * 0.15
 
-    // ROTATION Y: 5 full spins across entire page (0° → 1800°)
-    groupRef.current.rotation.y = scrollProgress * Math.PI * 10
+    // Mouse parallax
+    const mouseRotY = mouse.x * 0.12
+    const mouseRotX = mouse.y * 0.06
+    const mousePosX = mouse.x * 0.06
+    const mousePosY = mouse.y * -0.03
 
-    // ROTATION X: gentle oscillating tilt ±15° (gives organic tumbling feel)
-    groupRef.current.rotation.x = Math.sin(scrollProgress * Math.PI * 3) * 0.26 + 0.15
+    // Atmospheric drift
+    const driftY = Math.sin(t * 0.4) * 0.03
+    const driftX = Math.cos(t * 0.35) * 0.01
+    const driftZ = Math.sin(t * 0.25) * 0.008
 
-    // ROTATION Z: very subtle wobble
-    groupRef.current.rotation.z = Math.sin(scrollProgress * Math.PI * 2) * 0.06
+    // Targets
+    const targetRotY = scrollRotY + mouseRotY
+    const targetRotX = 0.15 + scrollRotX + mouseRotX
+    const targetRotZ = driftZ
+    const targetPosX = mousePosX + driftX
+    const targetPosY = driftY + mousePosY
+    const targetScale = scrollScale
 
-    // SCALE: bell curve — medium at start, largest at 50% scroll, small at end
-    // sin(scroll * PI) gives 0→1→0 curve
-    const scaleCurve = Math.sin(scrollProgress * Math.PI)
-    const scale = 1.2 + scaleCurve * 0.6 // range: 1.2 → 1.8 → 1.2
-    groupRef.current.scale.setScalar(scale)
+    // Luxury interpolation
+    c.rotX += (targetRotX - c.rotX) * lf
+    c.rotY += (targetRotY - c.rotY) * lf
+    c.rotZ += (targetRotZ - c.rotZ) * lf
+    c.posX += (targetPosX - c.posX) * lf
+    c.posY += (targetPosY - c.posY) * lf
+    c.scale += (targetScale - c.scale) * lf
 
-    // POSITION: stays centered, only very subtle Y drift downward
-    const yPos = -scrollProgress * 1.0
-    groupRef.current.position.set(0, yPos, 0)
+    groupRef.current.rotation.set(c.rotX, c.rotY, c.rotZ)
+    groupRef.current.position.set(c.posX, c.posY, 0)
+    groupRef.current.scale.setScalar(c.scale)
   })
 
   return (
@@ -58,39 +82,58 @@ function ToothModel({ scrollProgress }: { scrollProgress: number }) {
 }
 
 export default function ToothScene() {
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
   const [scrollProgress, setScrollProgress] = useState(0)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
 
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      if (totalHeight > 0) {
-        setScrollProgress(window.scrollY / totalHeight)
-      }
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouse({
+        x: (e.clientX / window.innerWidth) * 2 - 1,
+        y: (e.clientY / window.innerHeight) * 2 - 1,
+      })
     }
 
+    const handleScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      if (total > 0) setScrollProgress(window.scrollY / total)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   if (!mounted) return null
 
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 5 }}>
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 6 }}>
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 45 }}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, 3.8], fov: 40 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.1,
+        }}
+        dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? [1, 1] : [1, 2]}
         style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
-          <directionalLight position={[-3, 3, 3]} intensity={0.25} color="#88c9f7" />
-          <ToothModel scrollProgress={scrollProgress} />
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[4, 5, 4]} intensity={0.9} color="#fff8f0" />
+          <directionalLight position={[-3, 2, 3]} intensity={0.3} color="#e8f0ff" />
+          <directionalLight position={[0, -2, -3]} intensity={0.15} color="#ffffff" />
+          <ToothModel mouse={mouse} scrollProgress={scrollProgress} />
+          <ContactShadows position={[0, -1.2, 0]} opacity={0.12} scale={4} blur={2.5} far={2} color="#1d1a16" />
           <Environment preset="studio" />
         </Suspense>
       </Canvas>

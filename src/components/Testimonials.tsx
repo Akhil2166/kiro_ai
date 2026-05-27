@@ -1,85 +1,112 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const testimonials = [
   {
-    name: 'Rahul Kapoor',
-    location: 'Mumbai',
-    text: 'Denz transformed my smile completely. The team was incredibly professional and made me feel comfortable throughout the entire implant procedure.',
-  },
-  {
-    name: 'Meera Nair',
+    quote: 'The attention to detail here is unlike anything I have experienced. Every visit feels considered, calm, and precise.',
+    name: 'Priya Menon',
     location: 'Bangalore',
-    text: 'I was terrified of dentists until I visited Denz. Dr. Priya made my orthodontic journey a breeze. My Invisalign results are beyond amazing.',
   },
   {
-    name: 'Aditya Singh',
-    location: 'Delhi',
-    text: 'The AI diagnostics at Denz caught an issue that two other clinics missed. Their technology combined with genuine care is unmatched.',
+    quote: 'They transformed not just my smile, but my entire sense of confidence. The results are genuinely life-changing.',
+    name: 'Arjun Kapoor',
+    location: 'Mumbai',
   },
   {
-    name: 'Lakshmi Venkatesh',
+    quote: 'From the moment you walk in, you sense the difference. This is dentistry elevated to an art form.',
+    name: 'Lakshmi Rao',
     location: 'Chennai',
-    text: 'My kids actually look forward to dental visits now. Dr. Ananya has a magical way with children. The environment is so welcoming and modern.',
   },
 ]
 
 export default function Testimonials() {
   const [active, setActive] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const interval = setInterval(() => setActive((p) => (p + 1) % testimonials.length), 5000)
+    const interval = setInterval(() => {
+      setActive((p) => (p + 1) % testimonials.length)
+    }, 6000)
     return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }),
-      { threshold: 0.15 }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('revealed')
+        })
+      },
+      { threshold: 0.2 }
     )
-    ref.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+
+    sectionRef.current?.querySelectorAll('.reveal-el').forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
   return (
-    <section id="testimonials" ref={ref} className="py-20 md:py-[80px] px-10 max-w-site mx-auto">
-      <div className="text-center mb-16 reveal">
-        <p className="font-inter text-[14px] text-muted mb-4 tracking-wide uppercase">Testimonials</p>
-        <h2 className="font-figtree font-light text-[54px] leading-[54px] text-heading">
-          What our patients say
-        </h2>
-      </div>
+    <section ref={sectionRef} className="relative py-[120px] md:py-[200px] px-8 md:px-16">
+      <div className="max-w-site mx-auto">
+        <div className="max-w-[800px] mx-auto text-center">
+          {/* Label */}
+          <p className="reveal-el opacity-0 translate-y-6 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] font-body text-[11px] tracking-[0.2em] uppercase text-muted/60 mb-[60px] md:mb-[80px]">
+            Patient Stories
+          </p>
 
-      <div className="reveal max-w-3xl mx-auto relative min-h-[180px]">
-        {testimonials.map((t, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 flex flex-col items-center text-center transition-all duration-600 ${
-              i === active ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-            }`}
-          >
-            <p className="font-inter text-[18px] leading-[27px] text-body italic mb-8">
-              &ldquo;{t.text}&rdquo;
-            </p>
-            <p className="font-figtree text-[20px] text-heading">{t.name}</p>
-            <p className="font-inter text-[14px] text-muted mt-1">{t.location}</p>
+          {/* Quote area */}
+          <div className="relative min-h-[200px] md:min-h-[240px] flex items-center justify-center">
+            {testimonials.map((t, i) => (
+              <div
+                key={i}
+                className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-[1000ms] ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+                  i === active
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4 pointer-events-none'
+                }`}
+              >
+                <p
+                  className="font-display text-warm-black text-center mb-10"
+                  style={{
+                    fontSize: 'clamp(22px, 3vw, 36px)',
+                    fontWeight: 800,
+                    lineHeight: 1.3,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <p className="font-body text-[14px] text-muted">
+                  {t.name}
+                </p>
+                <p className="font-body text-[12px] text-muted/50 mt-1">
+                  {t.location}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
+
+          {/* Dots — minimal */}
+          <div className="flex justify-center gap-3 mt-12">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`h-[3px] rounded-full transition-all duration-700 ${
+                  i === active ? 'bg-warm-black w-8' : 'bg-border w-3 hover:bg-muted/40'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="flex justify-center gap-3 mt-12">
-        {testimonials.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setActive(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === active ? 'bg-primary w-6' : 'bg-border w-2 hover:bg-muted'
-            }`}
-          />
-        ))}
-      </div>
+      <style jsx>{`
+        .reveal-el.revealed {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
     </section>
   )
 }

@@ -1,47 +1,57 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
-import Navbar from '@/components/Navbar'
+import { useEffect, useRef } from 'react'
 import Hero from '@/components/Hero'
-import Marquee from '@/components/Marquee'
-import About from '@/components/About'
 import Services from '@/components/Services'
-import Team from '@/components/Team'
+import Experience from '@/components/Experience'
+import Transformations from '@/components/Transformations'
 import Testimonials from '@/components/Testimonials'
-import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
-import FloatingButtons from '@/components/FloatingButtons'
-import ChatBot from '@/components/ChatBot'
-import ScrollProgress from '@/components/ScrollProgress'
 
 const ToothScene = dynamic(() => import('@/components/ToothScene'), { ssr: false })
 
 export default function Home() {
+  const mainRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }),
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    )
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
+    let lenis: any = null
+    let rafId: number
+
+    const initLenis = async () => {
+      const Lenis = (await import('lenis')).default
+      lenis = new Lenis({
+        duration: 1.6,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 0.8,
+        touchMultiplier: 1.5,
+      })
+
+      function raf(time: number) {
+        lenis.raf(time)
+        rafId = requestAnimationFrame(raf)
+      }
+      rafId = requestAnimationFrame(raf)
+    }
+
+    initLenis()
+
+    return () => {
+      if (lenis) lenis.destroy()
+      if (rafId) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   return (
-    <main className="relative bg-white">
-      <ScrollProgress />
-      <Navbar />
+    <main ref={mainRef} className="relative">
       <ToothScene />
       <Hero />
-      <Marquee />
-      <About />
       <Services />
-      <Team />
+      <Experience />
+      <Transformations />
       <Testimonials />
-      <Contact />
       <Footer />
-      <FloatingButtons />
-      <ChatBot />
     </main>
   )
 }
