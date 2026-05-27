@@ -6,21 +6,22 @@ export default function Marquee() {
     'Orthodontics',
     'Cosmetic Dentistry',
     'Root Canal',
-    'Teeth Whitening',
-    'Dental Surgery',
+    'Whitening',
+    'Oral Surgery',
     'Pediatric Care',
     'Preventive Care',
   ]
 
   return (
-    <section className="relative z-[2] py-8 border-y border-white/5 overflow-hidden">
-      <div className="flex animate-marquee whitespace-nowrap">
+    <section className="py-8 border-y border-border overflow-hidden bg-white">
+      <div className="flex marquee-track whitespace-nowrap">
         {[...items, ...items].map((item, i) => (
           <span
             key={i}
-            className="mx-8 text-lg md:text-2xl font-display text-white/20 hover:text-accent transition-colors duration-300 cursor-default"
+            className="mx-10 font-figtree text-[28px] md:text-[36px] font-light text-border select-none"
           >
-            {item} <span className="text-accent/40 mx-4">&#x2022;</span>
+            {item}
+            <span className="text-primary/40 mx-6">/</span>
           </span>
         ))}
       </div>

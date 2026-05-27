@@ -2,54 +2,29 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        // Six B inspired color palette
-        primary: {
-          DEFAULT: '#1a1a2e',
-          light: '#2d2d44',
-          dark: '#0f0f1a',
-        },
-        accent: {
-          DEFAULT: '#c8f169',
-          light: '#d4f58a',
-          dark: '#a8d44a',
-        },
-        cream: {
-          DEFAULT: '#f5f0eb',
-          light: '#faf7f4',
-          dark: '#ebe4dc',
-        },
-        mint: {
-          DEFAULT: '#a8e6cf',
-          light: '#c4f0de',
-          dark: '#7dd4b0',
-        },
-        navy: {
-          DEFAULT: '#1a1a2e',
-          light: '#2d2d44',
-        },
+        primary: '#88c9f7',
+        heading: '#333c4c',
+        body: '#606979',
+        muted: '#8594ae',
+        border: '#f2f4f8',
+        surface: '#f2f4f8',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'serif'],
-        body: ['var(--font-body)', 'sans-serif'],
+        figtree: ['var(--font-figtree)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        inter: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
-      animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'spin-slow': 'spin 20s linear infinite',
-        'bounce-slow': 'bounce 3s infinite',
+      borderRadius: {
+        'btn': '12px',
+        'card': '16px',
+        'pill': '50px',
       },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
+      maxWidth: {
+        'site': '1440px',
       },
     },
   },

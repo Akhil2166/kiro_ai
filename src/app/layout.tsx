@@ -1,10 +1,24 @@
 import type { Metadata } from 'next'
+import { Figtree, Inter } from 'next/font/google'
 import './globals.css'
+
+const figtree = Figtree({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-figtree',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Denz | Premium Dental Care',
-  description: 'Experience world-class dental care with cutting-edge technology and compassionate professionals. Your smile, our passion.',
-  keywords: 'dental clinic, dentist, dental care, teeth whitening, implants, orthodontics',
+  description: 'At Denz, our team combines benevolence and expertise for a radiant smile of health and beauty. Your well-being, our priority!',
 }
 
 export default function RootLayout({
@@ -13,18 +27,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="noise-overlay">
-        {children}
-      </body>
+    <html lang="en" className={`${figtree.variable} ${inter.variable}`}>
+      <body>{children}</body>
     </html>
   )
 }
