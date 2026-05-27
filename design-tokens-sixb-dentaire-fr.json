@@ -1,0 +1,278 @@
+{
+  "url": "https://sixb-dentaire.fr/?ref=onepagelove",
+  "title": "Six B",
+  "description": "À Morlaàs, le cabinet SixB allie bienveillance et expertise pour un sourire éclatant de santé et de beauté. Votre bien-être, notre priorité !",
+  "scrapedAt": "2026-05-27T14:36:29.637Z",
+  "colors": {
+    "bg": "#ffffff",
+    "bgSecondary": "#8594ae",
+    "text": "#606979",
+    "textSecondary": "#606979",
+    "primary": "#88c9f7",
+    "secondary": "#88c9f7",
+    "border": "#f2f4f8",
+    "palette": [
+      {
+        "hex": "#ffffff",
+        "role": "block",
+        "count": 1,
+        "area": 1477916,
+        "contrast": "dark"
+      },
+      {
+        "hex": "#8594ae",
+        "role": "text-accent",
+        "count": 1,
+        "area": 547657,
+        "contrast": "dark"
+      },
+      {
+        "hex": "#333c4c",
+        "role": "text-accent",
+        "count": 1,
+        "area": 259178,
+        "contrast": "light"
+      },
+      {
+        "hex": "#f2f4f8",
+        "role": "button",
+        "count": 1,
+        "area": 23534,
+        "contrast": "dark"
+      },
+      {
+        "hex": "#606979",
+        "role": "text-accent",
+        "count": 1,
+        "area": 9150,
+        "contrast": "light"
+      },
+      {
+        "hex": "#88c9f7",
+        "role": "text-accent",
+        "count": 1,
+        "area": 50,
+        "contrast": "dark"
+      }
+    ]
+  },
+  "typography": {
+    "headingFont": {
+      "family": "__Figtree_2ca027, __Figtree_Fallback_2ca027, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "cleanFamily": "__Figtree_2ca027",
+      "weights": [
+        "300"
+      ],
+      "usedFor": "heading",
+      "fallback": "sans-serif",
+      "realUrl": "https://sixb-dentaire.fr/_next/static/media/d9fef5bf2f64cf9a-s.woff2"
+    },
+    "bodyFont": {
+      "family": "__Inter_f367f3, __Inter_Fallback_f367f3, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "cleanFamily": "__Inter_f367f3",
+      "weights": [
+        "400"
+      ],
+      "usedFor": "body",
+      "fallback": "sans-serif",
+      "realUrl": "https://sixb-dentaire.fr/_next/static/media/ba9851c3c22cd980-s.woff2"
+    },
+    "fontSizes": [
+      54,
+      40,
+      20,
+      18,
+      16,
+      14,
+      12
+    ],
+    "lineHeights": [],
+    "details": [
+      {
+        "role": "H2",
+        "size": 54,
+        "weight": "300",
+        "lineHeight": "54px",
+        "letterSpacing": "normal",
+        "font": "__Figtree_2ca027"
+      },
+      {
+        "role": "H3",
+        "size": 40,
+        "weight": "400",
+        "lineHeight": "40px",
+        "letterSpacing": "normal",
+        "font": "__Inter_f367f3"
+      },
+      {
+        "role": "H4",
+        "size": 20,
+        "weight": "400",
+        "lineHeight": "30px",
+        "letterSpacing": "normal",
+        "font": "__Inter_f367f3"
+      },
+      {
+        "role": "Body",
+        "size": 18,
+        "weight": "400",
+        "lineHeight": "27px",
+        "letterSpacing": "normal",
+        "font": "__Inter_f367f3"
+      },
+      {
+        "role": "Small",
+        "size": 14,
+        "weight": "400",
+        "lineHeight": "21px",
+        "letterSpacing": "normal",
+        "font": "__Inter_f367f3"
+      }
+    ]
+  },
+  "spacing": {
+    "base": 40,
+    "common": [
+      {
+        "value": 40,
+        "count": 5,
+        "role": "card"
+      },
+      {
+        "value": 80,
+        "count": 2,
+        "role": "section"
+      },
+      {
+        "value": 4,
+        "count": 1,
+        "role": "element"
+      },
+      {
+        "value": 8,
+        "count": 1,
+        "role": "element"
+      },
+      {
+        "value": 10,
+        "count": 1,
+        "role": "element"
+      },
+      {
+        "value": 12,
+        "count": 1,
+        "role": "element"
+      },
+      {
+        "value": 20,
+        "count": 1,
+        "role": "element"
+      }
+    ]
+  },
+  "borderRadius": [
+    {
+      "value": 12,
+      "count": 11,
+      "role": "button"
+    },
+    {
+      "value": 3,
+      "count": 5,
+      "role": "subtle"
+    },
+    {
+      "value": 8,
+      "count": 4,
+      "role": "button"
+    },
+    {
+      "value": 16,
+      "count": 4,
+      "role": "card"
+    },
+    {
+      "value": 50,
+      "count": 3,
+      "role": "card"
+    },
+    {
+      "value": 5,
+      "count": 2,
+      "role": "subtle"
+    }
+  ],
+  "shadows": [],
+  "components": {
+    "primaryButton": null,
+    "buttons": [],
+    "card": null
+  },
+  "fontFaces": [
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/ba9851c3c22cd980-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/21350d82a1f187e9-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/c5fe6dc8356a8c31-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/19cfc7226ec3afaa-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/df0a9ae256c0569c-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/8e9860b6e62d6359-s.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Inter_f367f3",
+      "src": "https://sixb-dentaire.fr/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+      "style": "normal",
+      "weight": "100 900"
+    },
+    {
+      "family": "__Figtree_2ca027",
+      "src": "https://sixb-dentaire.fr/_next/static/media/d9fef5bf2f64cf9a-s.woff2",
+      "style": "normal",
+      "weight": "300 900"
+    },
+    {
+      "family": "__Figtree_2ca027",
+      "src": "https://sixb-dentaire.fr/_next/static/media/de42cfb9a3b980ae-s.p.woff2",
+      "style": "normal",
+      "weight": "300 900"
+    }
+  ],
+  "cssCustomProperties": [],
+  "tags": [
+    "light",
+    "rounded",
+    "accented",
+    "sans-serif"
+  ],
+  "mood": "Friendly, approachable design with rounded shapes and generous whitespace.",
+  "heroHeadline": "Des professionnels à votre écoute",
+  "heroSubtitle": "Toute l'équipe du cabinet mettra en oeuvre sa Bienveillance et sa compétence pour que votre sourire retrouve Beauté et Blancheur afin de vous apporter Bien être et Bonheur par une Bouche saine en acco",
+  "isJapanese": false
+}
