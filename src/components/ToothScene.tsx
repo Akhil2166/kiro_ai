@@ -5,17 +5,13 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, Environment, ContactShadows } from '@react-three/drei'
 import * as THREE from 'three'
 
-function ToothModel({ mouse }: { mouse: { x: number; y: number } }) {
+function ToothModel({ mouse, scrollProgress }: { mouse: { x: number; y: number }; scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/models/scene.gltf')
   const clonedScene = useMemo(() => scene.clone(), [scene])
-
-  // Target values for smooth interpolation
-  const targetRotation = useRef({ x: 0.15, y: 0 })
-  const targetPosition = useRef({ x: 0, y: 0 })
+  const current = useRef({ rotX: 0.15, rotY: 0, rotZ: 0, posX: 0, posY: 0, scale: 1.6 })
 
   useEffect(() => {
-    // Ceramic material — realistic glossy white dental ceramic
     clonedScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
@@ -37,35 +33,45 @@ function ToothModel({ mouse }: { mouse: { x: number; y: number } }) {
 
   useFrame((state) => {
     if (!groupRef.current) return
-
     const t = state.clock.elapsedTime
+    const c = current.current
+    const lf = 0.018
 
-    // === CINEMATIC BEHAVIOR ===
-    // NO continuous spinning. Only subtle drift + mouse parallax.
+    // Scroll-linked perspective (NOT spinning)
+    const scrollRotY = scrollProgress * 0.5
+    const scrollRotX = Math.sin(scrollProgress * Math.PI) * 0.12
+    const scrollScale = 1.6 + Math.sin(scrollProgress * Math.PI * 0.8) * 0.15
 
-    // Mouse parallax — tooth follows cursor gently
-    targetRotation.current.y = mouse.x * 0.15
-    targetRotation.current.x = 0.15 + mouse.y * 0.08
+    // Mouse parallax
+    const mouseRotY = mouse.x * 0.12
+    const mouseRotX = mouse.y * 0.06
+    const mousePosX = mouse.x * 0.06
+    const mousePosY = mouse.y * -0.03
 
-    // Smooth interpolation (luxury easing)
-    groupRef.current.rotation.y += (targetRotation.current.y - groupRef.current.rotation.y) * 0.03
-    groupRef.current.rotation.x += (targetRotation.current.x - groupRef.current.rotation.x) * 0.03
+    // Atmospheric drift
+    const driftY = Math.sin(t * 0.4) * 0.03
+    const driftX = Math.cos(t * 0.35) * 0.01
+    const driftZ = Math.sin(t * 0.25) * 0.008
 
-    // Very slow minimal Z wobble (barely perceptible)
-    groupRef.current.rotation.z = Math.sin(t * 0.3) * 0.015
+    // Targets
+    const targetRotY = scrollRotY + mouseRotY
+    const targetRotX = 0.15 + scrollRotX + mouseRotX
+    const targetRotZ = driftZ
+    const targetPosX = mousePosX + driftX
+    const targetPosY = driftY + mousePosY
+    const targetScale = scrollScale
 
-    // Subtle drift — floating in space (slow, cinematic)
-    const driftY = Math.sin(t * 0.5) * 0.04
-    const driftX = Math.cos(t * 0.4) * 0.015
+    // Luxury interpolation
+    c.rotX += (targetRotX - c.rotX) * lf
+    c.rotY += (targetRotY - c.rotY) * lf
+    c.rotZ += (targetRotZ - c.rotZ) * lf
+    c.posX += (targetPosX - c.posX) * lf
+    c.posY += (targetPosY - c.posY) * lf
+    c.scale += (targetScale - c.scale) * lf
 
-    targetPosition.current.x = mouse.x * 0.08 + driftX
-    targetPosition.current.y = driftY + mouse.y * -0.04
-
-    groupRef.current.position.x += (targetPosition.current.x - groupRef.current.position.x) * 0.02
-    groupRef.current.position.y += (targetPosition.current.y - groupRef.current.position.y) * 0.02
-
-    // Static scale — no breathing, just presence
-    groupRef.current.scale.setScalar(1.6)
+    groupRef.current.rotation.set(c.rotX, c.rotY, c.rotZ)
+    groupRef.current.position.set(c.posX, c.posY, 0)
+    groupRef.current.scale.setScalar(c.scale)
   })
 
   return (
@@ -77,28 +83,38 @@ function ToothModel({ mouse }: { mouse: { x: number; y: number } }) {
 
 export default function ToothScene() {
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const [scrollProgress, setScrollProgress] = useState(0)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
 
     const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1
-      const y = (e.clientY / window.innerHeight) * 2 - 1
-      setMouse({ x, y })
+      setMouse({
+        x: (e.clientX / window.innerWidth) * 2 - 1,
+        y: (e.clientY / window.innerHeight) * 2 - 1,
+      })
+    }
+
+    const handleScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      if (total > 0) setScrollProgress(window.scrollY / total)
     }
 
     window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   if (!mounted) return null
 
   return (
-    <div
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 6 }}
-    >
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 6 }}>
       <Canvas
         camera={{ position: [0, 0, 3.8], fov: 40 }}
         gl={{
@@ -112,43 +128,12 @@ export default function ToothScene() {
         style={{ background: 'transparent' }}
       >
         <Suspense fallback={null}>
-          {/* Studio lighting — soft, cinematic, product-commercial style */}
           <ambientLight intensity={0.4} />
-
-          {/* Key light — warm, from upper right */}
-          <directionalLight
-            position={[4, 5, 4]}
-            intensity={0.9}
-            color="#fff8f0"
-          />
-
-          {/* Fill light — cool, from left */}
-          <directionalLight
-            position={[-3, 2, 3]}
-            intensity={0.3}
-            color="#e8f0ff"
-          />
-
-          {/* Rim light — subtle edge definition */}
-          <directionalLight
-            position={[0, -2, -3]}
-            intensity={0.15}
-            color="#ffffff"
-          />
-
-          <ToothModel mouse={mouse} />
-
-          {/* Soft contact shadow underneath */}
-          <ContactShadows
-            position={[0, -1.2, 0]}
-            opacity={0.12}
-            scale={4}
-            blur={2.5}
-            far={2}
-            color="#1d1a16"
-          />
-
-          {/* HDRI studio reflections */}
+          <directionalLight position={[4, 5, 4]} intensity={0.9} color="#fff8f0" />
+          <directionalLight position={[-3, 2, 3]} intensity={0.3} color="#e8f0ff" />
+          <directionalLight position={[0, -2, -3]} intensity={0.15} color="#ffffff" />
+          <ToothModel mouse={mouse} scrollProgress={scrollProgress} />
+          <ContactShadows position={[0, -1.2, 0]} opacity={0.12} scale={4} blur={2.5} far={2} color="#1d1a16" />
           <Environment preset="studio" />
         </Suspense>
       </Canvas>
